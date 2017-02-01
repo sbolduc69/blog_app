@@ -2,8 +2,9 @@ require "rails_helper"
 RSpec.feature "Listing Articles" do
 
   before do
-      @article1 = Article.create(title: "First Article", body: "Lorem ipsum dolor sit amet.")
-      @article2 = Article.create(title: "Second Article", body: "Mauris id vehicula metus. Vivamus sollicitudin mi.")
+    tom = User.create(email: "goat@example.com", password: "password")
+      @article1 = Article.create(title: "First Article", body: "Lorem ipsum dolor sit amet.", user: tom)
+      @article2 = Article.create(title: "Second Article", body: "Mauris id vehicula metus. Vivamus sollicitudin mi.", user: tom)
   end
 
 
