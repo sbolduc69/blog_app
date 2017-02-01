@@ -2,13 +2,13 @@ require "rails_helper"
 RSpec.feature "Listing Articles" do
 
   before do
-    tom = User.create(email: "goat@example.com", password: "password")
-      @article1 = Article.create(title: "First Article", body: "Lorem ipsum dolor sit amet.", user: tom)
-      @article2 = Article.create(title: "Second Article", body: "Mauris id vehicula metus. Vivamus sollicitudin mi.", user: tom)
+    @tom = User.create(email: "goat@example.com", password: "password")
+      @article1 = Article.create(title: "First Article", body: "Lorem ipsum dolor sit amet.", user: @tom)
+      @article2 = Article.create(title: "Second Article", body: "Mauris id vehicula metus. Vivamus sollicitudin mi.", user: @tom)
   end
 
 
-  scenario "A user lists all articles" do
+  scenario "A user lists all articles but is not signed in" do
     visit "/"
 
     expect(page).to have_content(@article1.title)
@@ -17,9 +17,23 @@ RSpec.feature "Listing Articles" do
     expect(page).to have_content(@article2.body)
     expect(page).to have_link(@article1.title)
     expect(page).to have_link(@article2.title)
+    expect(page).not_to have_link("New Article")
   end
 
-   scenario "A user has no articles" do
+  scenario "A user lists all articles and is signed in" do
+    login_as(@tom)
+    visit "/"
+
+    expect(page).to have_content(@article1.title)
+    expect(page).to have_content(@article1.body)
+    expect(page).to have_content(@article2.title)
+    expect(page).to have_content(@article2.body)
+    expect(page).to have_link(@article1.title)
+    expect(page).to have_link(@article2.title)
+    expect(page).to have_link("New Article")
+  end
+
+  scenario "A user has no articles" do
     Article.delete_all
     visit "/"
 
