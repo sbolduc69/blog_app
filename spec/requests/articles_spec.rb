@@ -57,25 +57,28 @@ RSpec.describe "Articles", type: :request do
 
     context "Signed in user but not article owner cannot delete article" do
       before do
-        login_as @gronk
+        login_as(@gronk)
         delete "/articles/#{@article.id}"
       end
 
       it "Redirect to home page" do
         expect(response.status).to eq 302
         flash_message = "You can only delete your own article"
-        expect(flash[:alert]).to eq flash_message
+        expect(flash[:danger]).to eq flash_message
+        redirect_to root_path
       end
     end
 
     context "Signed in user and article owner can delete own article" do
       before do
-        login_as @tom
+        login_as(@tom)
         delete "/articles/#{@article.id}"
       end
 
-      it "Successfully delete article" do
+      it "Successfully deleted article" do
         expect(response.status).to eq 302
+        flash[:success] = "Article has been deleted"
+        redirect_to articles_path
       end
     end
   end
