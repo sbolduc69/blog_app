@@ -14,7 +14,7 @@ RSpec.describe "Articles", type: :request do
 
       it "redirects to the signin page" do
         expect(response.status).to eq 302
-        flash_message ="You must be signed in or sign up before continuing"
+        flash_message ="You need to sign in or sign up before continuing."
         expect(flash[:alert]).to eq flash_message
       end
     end
@@ -22,7 +22,7 @@ RSpec.describe "Articles", type: :request do
     context 'with signed in user who is non-owner' do
       before do
         login_as(@gronk)
-        get "articles/#{@article.id}/edit"
+        get "/articles/#{@article.id}/edit"
       end
 
       it "redirects to the home page" do
@@ -35,7 +35,7 @@ RSpec.describe "Articles", type: :request do
     context 'with signed in user is owner' do
       before do
         login_as(@tom)
-        get "articles/#{@article.id}/edit"
+        get "/articles/#{@article.id}/edit"
       end
 
       it "successfully edits article" do
